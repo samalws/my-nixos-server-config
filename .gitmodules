@@ -1,3 +1,6 @@
 [submodule "heaven/samalws.com-3"]
 	path = heaven/samalws.com-3
 	url = https://github.com/samalws/samalws.com-3
+[submodule "heaven/zehner-raus"]
+	path = heaven/zehner-raus
+	url = https://github.com/samalws/zehner-raus
