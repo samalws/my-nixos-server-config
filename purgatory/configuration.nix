@@ -81,12 +81,7 @@ in {
     rsaKeyFile  = sslKey;
   };
 
-  services.nginx = {
-    enable = true;
-    config = import ./nginxconf.nix;
-    user = "root";
-    group = "root";
-  };
+  services.nginx = (import ./nginxConfig.nix) sslCert sslKey;
 
   environment.systemPackages = with pkgs; [
     vim
