@@ -1,8 +1,9 @@
 pkgs: desc: folder: {
   description = desc;
   serviceConfig = {
-    Type = "forking";
-    ExecStart = "/home/uwe/purgatory/nodeService /home/uwe/heaven/${folder} ${pkgs.nodejs}/bin/node";
+    Type = "simple";
+    WorkingDirectory = "/home/uwe/heaven/${folder}";
+    ExecStart = "${pkgs.nodejs}/bin/node server.js";
   };
   after = ["network.target"];
   wantedBy = ["multi-user.target"];
