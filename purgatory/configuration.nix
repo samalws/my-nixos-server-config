@@ -1,7 +1,10 @@
 { config, pkgs, ... }:
 let
-  ssh_keys = (import ./ssh_keys.nix);
+  sshKeys = (import ./sshKeys.nix);
+  nodeService = (import ./nodeService.nix) pkgs;
   release = "nixos-20.09";
+  sslCert = "/etc/letsencrypt/live/samuwe.com/fullchain.pem";
+  sslKey  = "/etc/letsencrypt/live/samuwe.com/privkey.pem";
 in {
   imports =
     [
@@ -37,46 +40,19 @@ in {
     uwe = {
       isNormalUser = true;
       extraGroups = [ "wheel" ];
-      openssh.authorizedKeys.keys = ssh_keys.uwe;
+      openssh.authorizedKeys.keys = sshKeys.uwe;
     };
     git = {
       isNormalUser = true;
-      openssh.authorizedKeys.keys = ssh_keys.git;
+      openssh.authorizedKeys.keys = sshKeys.git;
     }; 
   };
 
-  systemd.services.forwardHttp = {
-    description = "forward http to https service";
-    serviceConfig = {
-      Type = "forking";
-      ExecStart = ''/home/uwe/purgatory/nodeService /home/uwe/heaven/forward-http ${pkgs.nodejs}/bin/node'';
-    };
-    after = [ "network.target" ];
-    wantedBy = [ "multi-user.target" ];
+  systemd.services = {
+    forwardHttp = nodeService "forward http to https service" "forward-http";
+    myWebsite = nodeService "host samalws.com-3" "my-website";
+    zehnerRaus = nodeService "zehner raus service" "zehner-raus/server";
   };
-  systemd.services.forwardHttp.enable = true;
-
-  systemd.services.myWebsite = {
-    description = "host samalws.com-3";
-    serviceConfig = {
-      Type = "forking";
-      ExecStart = ''/home/uwe/purgatory/nodeService /home/uwe/heaven/my-website ${pkgs.nodejs}/bin/node'';
-    };
-    after = [ "network.target" ];
-    wantedBy = [ "multi-user.target" ];
-  };
-  systemd.services.myWebsite.enable = true;
-
-  systemd.services.zehnerRaus = {
-    description = "zehner raus service";
-    serviceConfig = {
-      Type = "forking";
-      ExecStart = ''/home/uwe/purgatory/nodeService /home/uwe/heaven/zehner-raus/server ${pkgs.nodejs}/bin/node'';
-    };
-    after = [ "network.target" ];
-    wantedBy = [ "multi-user.target" ];
-  };
-  systemd.services.zehnerRaus.enable = true;
 
   mailserver = {
     enable = true;
@@ -90,19 +66,19 @@ in {
         "sam@samalws.com".hashedPasswordFile = "/home/uwe/purgatory/mailPassHashed";
     };
     certificateScheme = 1;
-    certificateFile = "/etc/letsencrypt/live/samuwe.com/fullchain.pem";
-    keyFile         = "/etc/letsencrypt/live/samuwe.com/privkey.pem";
+    certificateFile = sslCert;
+    keyFile         = sslKey;
   };
 
   services.vsftpd = {
     enable = true;
     localUsers = true;
     userlist = [ "uwe" ];
-    userlistEnable = true;
+    userlistEnable      = true;
     forceLocalLoginsSSL = true;
-    forceLocalDataSSL = true;
-    rsaCertFile = "/etc/letsencrypt/live/samuwe.com/fullchain.pem";
-    rsaKeyFile = "/etc/letsencrypt/live/samuwe.com/privkey.pem";
+    forceLocalDataSSL   = true;
+    rsaCertFile = sslCert;
+    rsaKeyFile  = sslKey;
   };
 
   services.nginx = {
