@@ -5,6 +5,7 @@ let
     onlySSL = true;
     sslCertificate    = sslCert;
     sslCertificateKey = sslKey;
+    root = "/home/uwe/purgatory/emptyDir";
     locations."/zehnerRaus" = {
       proxyPass = "http://127.0.0.1:444";
       proxyWebsockets = true;
