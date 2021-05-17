@@ -1,3 +1,4 @@
+# pkgs:
 let
   sshKeys = (import ./sshKeys.nix);
 in {
@@ -8,6 +9,7 @@ in {
   };
   git = {
     isNormalUser = true;
+    # shell = "${pkgs.git}/bin/git-shell";
     openssh.authorizedKeys.keys = sshKeys.git;
   };
 }

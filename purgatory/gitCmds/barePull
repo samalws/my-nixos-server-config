@@ -1,0 +1,5 @@
+#!/bin/sh
+
+mkdir ~/worktree
+GIT_WORK_TREE=~/worktree git pull $1 $2
+rm -rf ~/worktree

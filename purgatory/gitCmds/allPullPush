@@ -1,0 +1,5 @@
+#!/bin/sh
+
+cd ~/cmds
+
+./gitPullPush samalws.com-3

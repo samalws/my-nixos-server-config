@@ -1,0 +1,9 @@
+#!/bin/sh
+
+cd ~
+
+if [ ! -d $1.git ] ; then
+  git init --bare $1.git
+  cd $1.git
+  git remote add github git@github.com:$2/$1.git
+fi

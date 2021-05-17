@@ -15,6 +15,15 @@ let
       extraConfig = extraCfg;
     };
   };
+  vhWopalla = {
+    onlySSL = true;
+    sslCertificate    = sslCert;
+    sslCertificateKey = sslKey;
+    locations."/" = {
+      proxyPass = "http://127.0.0.1:446";
+      extraConfig = extraCfg;
+    };
+  };
 in {
   enable = true;
   user = "root";
@@ -27,5 +36,7 @@ in {
     "www.samuwe.com"  = vhMain;
     "samalws.com"     = vhMain;
     "www.samalws.com" = vhMain;
+    "wopalla.com"     = vhWopalla;
+    "www.wopalla.com" = vhWopalla;
   };
 }

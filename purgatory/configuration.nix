@@ -4,10 +4,11 @@ let
   sslKey  = "/etc/letsencrypt/live/samuwe.com/privkey.pem";
 in {
   imports = (import ./imports.nix);
+  # imports = [ /etc/nixos/hardware-configuration.nix ];
 
   networking = (import ./networkConfig.nix);
-  users.users = (import ./userConfig.nix);
-  systemd.services = (import ./systemdConfig.nix) pkgs;
+  users.users = (import ./userConfig.nix) pkgs;
+  systemd.services = (import ./systemdConfig.nix); # pkgs;
   mailserver = (import ./mailserverConfig.nix) sslCert sslKey;
   services.vsftpd = (import ./ftpConfig.nix) sslCert sslKey;
   services.nginx = (import ./nginxConfig.nix) sslCert sslKey;
@@ -21,6 +22,7 @@ in {
   services.openssh = {
     enable = true;
     permitRootLogin = "no";
+    passwordAuthentication = false;
   };
 
   environment.systemPackages = with pkgs; [

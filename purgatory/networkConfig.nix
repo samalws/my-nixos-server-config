@@ -1,9 +1,9 @@
 {
   hostName = "uwe-land";
-  useDHCP = false;
+  #useDHCP = false;
   firewall.enable = false;
-  interfaces = {
-    ens3.useDHCP = true;
-    ens7.useDHCP = true;
-  };
+  #  interfaces = {
+  #    ens3.useDHCP = true;
+  #    ens7.useDHCP = true;
+  #  };
 }

@@ -4,3 +4,6 @@
 [submodule "heaven/zehner-raus"]
 	path = heaven/zehner-raus
 	url = https://github.com/samalws/zehner-raus
+[submodule "heaven/wopalla.com"]
+	path = heaven/wopalla.com
+	url = https://github.com/Pihpihpih/wopalla.com
